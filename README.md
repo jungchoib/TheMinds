@@ -1,1 +1,1 @@
-# TheMinds
+# Java team project
