@@ -16,5 +16,8 @@ public class SuButton extends JButton implements ActionListener{
 	// 버튼 누르면
 	public void actionPerformed(ActionEvent e) {
 		frame.useSu();
+		
+		if (frame.su == 0)
+			setVisible(false);
 	}
 }

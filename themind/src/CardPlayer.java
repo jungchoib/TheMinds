@@ -1,6 +1,8 @@
+import java.util.Arrays;
 public class CardPlayer {
 
-    private Card[] hand; // 갖고 있는 카드
+    public int[] hand;
+    private int[] hand2;// 갖고 있는 카드
     public int card_count; // 갖고 있는 카드의 장 수
     public int min_num; // 손패 중 제일 작은 숫자 (손패(card_count)=0일때는 0)
 
@@ -9,7 +11,11 @@ public class CardPlayer {
     /** Constructor CardPlayer - max_cards 카드를 수용가능한 Card 배열 객체를 만들어 CardPlayer 생성
      * @param max_cards - 들고 있을 수 있는 카드의 최대 장수 */
     public CardPlayer(int max_cards) {
-        hand = new Card[max_cards];
+    	
+        hand = new int[max_cards];
+        
+        
+        
         card_count = 0;
     }
 
@@ -18,8 +24,10 @@ public class CardPlayer {
      * @return 성공적으로 받았으면 true, 그렇지 않으면 false */
     public boolean receiveCard(Card c) {
         if (card_count < hand.length) {
-            hand[card_count] = (c);
+            hand[card_count] = (c.getRank());
             card_count += 1;
+            
+           
             return true;
         }
         else
@@ -32,7 +40,8 @@ public class CardPlayer {
     
    // 새로운 레벨 시작하기 전에 손패 초기화
     public void reDraw(int max_cards) {
-    	hand = new Card[max_cards];
+    	hand = new int[max_cards];
+    	
 		card_count = 0;
     }
     
@@ -40,20 +49,45 @@ public class CardPlayer {
     //사람 버튼에 숫자 보여주기위해
     /** showCards - 클릭시 낼 카드(패중 제일 작은카드) 보여준다.
      * @return 들고 있는 카드 전체  */
-    public Card showCards() {
-        return hand[min_num - 1];
+    public int[] showCards() {
+    	 Arrays.sort(hand);
+         for (int i = 0; i < hand.length / 2; i++) {
+             int temp = hand[i];
+             hand[i] = hand[hand.length - i - 1];
+             hand[hand.length - i - 1] = temp;
+         }
+         
+         return hand;
+     }
+    public int showCards2(int r,int c) {
+    	
+   	 	Arrays.sort(hand);
+        
+        return hand[r*6+c];
     }
+    public int[] yourCards() {
+    	Arrays.sort(hand);
+    	return hand;
+    }
+        
+    
     
     // min_num 업데이트하기 (버튼 누를때마다 발생)
     public void updateMinNum() {
-    	min_num = hand[card_count - 1].getRank();
+    	showCards();
+//    	min_num = hand[card_count - 1];
+    	
     }
     
     // 사용한 카드 패에서 제거하기
     // 제거됬으면 true, 불가하면 false
     public boolean removeCard() {
     	if (card_count > 0) {
-    		hand[card_count - 1] = null;
+    		
+    		card_count--;
+    		hand=Arrays.copyOf(hand,hand.length-1);
+    		System.out.println(Arrays.toString(hand));
+    		
     		return true;
     	}
     	else
